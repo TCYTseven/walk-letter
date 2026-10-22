@@ -1,0 +1,38 @@
+[
+  {
+    "filename": "lane.jpg",
+    "date": "2024-06-14T18:12:00",
+    "width": 1200,
+    "height": 1600
+  },
+  {
+    "filename": "meadow.jpg",
+    "date": "2024-06-14T18:24:00",
+    "width": 1600,
+    "height": 1067
+  },
+  {
+    "filename": "sun.jpg",
+    "date": "2024-06-14T18:41:00",
+    "width": 1200,
+    "height": 1600
+  },
+  {
+    "filename": "hills.jpg",
+    "date": "2024-06-21T19:02:00",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "filename": "path.jpg",
+    "date": "2024-06-21T19:18:00",
+    "width": 1080,
+    "height": 1440
+  },
+  {
+    "filename": "dusk.jpg",
+    "date": "2024-06-21T19:33:00",
+    "width": 1440,
+    "height": 1080
+  }
+]

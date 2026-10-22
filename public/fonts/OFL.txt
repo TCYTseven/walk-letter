@@ -1,0 +1,7 @@
+Fredoka
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+https://openfontlicense.org/open-font-license-official-text/
+
+public/fonts/fredoka-600.woff is the Fredoka file the 3D date labels use.
+The interface also loads Caveat and Fredoka through next/font.
+Both families are licensed under the SIL Open Font License 1.1.
