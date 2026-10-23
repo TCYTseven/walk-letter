@@ -47,3 +47,4 @@ canvas { display: block; }
 }
 .cute-btn:hover { transform: translateY(-2px); }
 .cute-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #d94f74, 0 4px 10px rgba(255, 111, 145, 0.3); }
+.cute-btn:disabled { opacity: 0.5; cursor: default; transform: none; }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import letter from "@/data/letter.json";
+import { letter } from "@/lib/letter";
 import { useStore } from "@/lib/store";
 import { ENVELOPE_OPENED_EVENT, letterCardSize } from "./envelope/shared";
 
@@ -51,8 +51,8 @@ export default function LetterOverlay() {
           <article className="lo-card" style={{ width: card.w, height: card.h }} aria-label="Letter">
             <div className="lo-scroll">
               <p className="lo-greeting">{letter.greeting}</p>
-              {letter.paragraphs.map((p) => (
-                <p key={p}>{p}</p>
+              {letter.paragraphs.map((p, i) => (
+                <p key={i}>{p}</p>
               ))}
               <p className="lo-sign">
                 {letter.signoff}

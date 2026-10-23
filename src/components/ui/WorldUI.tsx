@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import letter from "@/data/letter.json";
+import { letter } from "@/lib/letter";
 import { useStore } from "@/lib/store";
 import styles from "./ui.module.css";
 

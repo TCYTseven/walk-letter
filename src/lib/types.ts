@@ -30,3 +30,21 @@ export interface LetterContent {
    */
   readonly surpriseUrl: string;
 }
+
+/** One photo in a letter made at /customize. */
+export interface SharedPhoto {
+  /** Same-origin URL served by /api/files. */
+  src: string;
+  date: string;
+  width: number;
+  height: number;
+}
+
+/** Manifest stored for each shared letter and played at /<id>. */
+export interface SharedLetter {
+  version: 1;
+  id: string;
+  createdAt: string;
+  letter: LetterContent;
+  photos: SharedPhoto[];
+}
