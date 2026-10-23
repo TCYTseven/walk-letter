@@ -31,6 +31,7 @@ export interface PublishedLink {
 
 const LETTER_KEY = "walk-letter:draft-letter";
 const PUBLISHED_KEY = "walk-letter:published";
+const PENDING_ID_KEY = "walk-letter:pending-id";
 const DB_NAME = "walk-letter";
 const STORE = "draft";
 const PHOTOS_KEY = "photos";
@@ -66,6 +67,24 @@ export function savePublished(list: PublishedLink[]) {
     localStorage.setItem(PUBLISHED_KEY, JSON.stringify(list));
   } catch {
     // Ignore; the link is still shown on screen.
+  }
+}
+
+/** Share id of a link being created. Reused on retry so the server's one-per-day claim still matches. */
+export function loadPendingId(): string | null {
+  try {
+    return localStorage.getItem(PENDING_ID_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function savePendingId(id: string | null) {
+  try {
+    if (id) localStorage.setItem(PENDING_ID_KEY, id);
+    else localStorage.removeItem(PENDING_ID_KEY);
+  } catch {
+    // Ignore; a retry then uses a new id.
   }
 }
 

@@ -17,11 +17,11 @@ Open the local URL that Next.js prints. `npm run dev` prepares the sample photos
 
 Open `/customize`.
 
-1. Drop in as many photos as you like (up to 300). They are resized in the browser, and dates come from each photo's EXIF data when it has them. Drag to reorder, or sort by date.
+1. Drop in up to 20 photos. They are resized in the browser, and dates come from each photo's EXIF data when it has them. Drag to reorder, or sort by date.
 2. Write the letter.
 3. Click **Create my link** and copy the link. Whoever opens `/<id>` gets the envelope, your letter, and the walk with your photos.
 
-The draft is saved in your browser (localStorage for the letter, IndexedDB for the photos), so a reload keeps your work. Photos and the letter are only uploaded when you create the link. A link never changes after it is made. See [Customize and share](docs/04-customize-and-share.md).
+The draft is saved in your browser (localStorage for the letter, IndexedDB for the photos), so a reload keeps your work. Photos and the letter are only uploaded when you create the link. A link never changes after it is made. Each IP address can make one link per 24 hours. See [Customize and share](docs/04-customize-and-share.md).
 
 ## Make it yours in the repository
 

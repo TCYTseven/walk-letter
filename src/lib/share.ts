@@ -2,7 +2,7 @@ import type { LetterContent, SharedLetter, SharedPhoto } from "./types";
 
 /** Share ids are 10 base62 characters, for example "k3T9pQx2Ab". */
 export const ID_PATTERN = /^[A-Za-z0-9]{10}$/;
-export const MAX_PHOTOS = 300;
+export const MAX_PHOTOS = 20;
 /** Uploads are resized in the browser first, so real files land far below this. */
 export const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 

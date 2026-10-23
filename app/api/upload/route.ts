@@ -1,4 +1,5 @@
 import { ID_PATTERN, MAX_PHOTOS, MAX_UPLOAD_BYTES, manifestPath, photoPath, photoUrl } from "@/lib/share";
+import { QuotaError, claimLetter, clientIp } from "@/lib/server/quota";
 import { StorageUnavailableError, fileExists, putFile } from "@/lib/server/storage";
 
 /** POST /api/upload?id=<shareId>&n=<index> with a JPEG body. Stores one photo of an unpublished letter. */
@@ -22,8 +23,10 @@ export async function POST(request: Request) {
     if (await fileExists(manifestPath(id))) {
       return Response.json({ error: "This letter is already published." }, { status: 409 });
     }
+    await claimLetter(clientIp(request), id);
     await putFile(photoPath(id, n), body, "image/jpeg", { overwrite: true });
   } catch (err) {
+    if (err instanceof QuotaError) return Response.json({ error: err.message }, { status: 429 });
     if (err instanceof StorageUnavailableError) return Response.json({ error: err.message }, { status: 503 });
     throw err;
   }

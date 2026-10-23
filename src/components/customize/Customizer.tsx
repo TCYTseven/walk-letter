@@ -7,14 +7,16 @@ import {
   type LetterForm,
   type PublishedLink,
   loadLetterDraft,
+  loadPendingId,
   loadPhotoDraft,
   loadPublished,
   saveLetterDraft,
+  savePendingId,
   savePhotoDraft,
   savePublished,
 } from "@/lib/draft";
 import { prepareImage } from "@/lib/prepareImage";
-import { MAX_PHOTOS, newShareId } from "@/lib/share";
+import { ID_PATTERN, MAX_PHOTOS, newShareId } from "@/lib/share";
 import type { LetterContent } from "@/lib/types";
 import styles from "./customize.module.css";
 
@@ -61,10 +63,15 @@ async function runPool<T>(items: T[], size: number, work: (item: T, index: numbe
   await Promise.all(Array.from({ length: Math.min(size, items.length) }, worker));
 }
 
+/** The server's one-letter-per-day limit. Retrying does not help. */
+class LimitError extends Error {}
+
 async function postJson(url: string, init: RequestInit): Promise<Record<string, unknown>> {
   const res = await fetch(url, init);
   const data = (await res.json().catch(() => ({}))) as Record<string, unknown>;
-  if (!res.ok) throw new Error(typeof data.error === "string" ? data.error : `Request failed (${res.status}).`);
+  const message = typeof data.error === "string" ? data.error : `Request failed (${res.status}).`;
+  if (res.status === 429) throw new LimitError(message);
+  if (!res.ok) throw new Error(message);
   return data;
 }
 
@@ -74,7 +81,7 @@ async function uploadPhoto(id: string, n: number, blob: Blob) {
       await postJson(`/api/upload?id=${id}&n=${n}`, { method: "POST", body: blob, headers: { "Content-Type": "image/jpeg" } });
       return;
     } catch (err) {
-      if (attempt >= 2) throw err;
+      if (attempt >= 2 || err instanceof LimitError) throw err;
       await new Promise((r) => setTimeout(r, 800 * (attempt + 1)));
     }
   }
@@ -164,7 +171,9 @@ export default function Customizer() {
   const canPublish = loaded && !busy && photos.length > 0 && letter.paragraphs.length > 0 && !urlProblem;
 
   const createLink = async () => {
-    const id = newShareId();
+    const pending = loadPendingId();
+    const id = pending && ID_PATTERN.test(pending) ? pending : newShareId();
+    savePendingId(id);
     const batch = photos.slice();
     try {
       let done = 0;
@@ -188,9 +197,11 @@ export default function Customizer() {
       const list = [entry, ...published];
       setPublished(list);
       savePublished(list);
+      savePendingId(null);
       setPublish({ kind: "done", id });
     } catch (err) {
-      setPublish({ kind: "error", message: err instanceof Error ? err.message : "Something went wrong." });
+      const message = err instanceof Error ? err.message : "Something went wrong.";
+      setPublish({ kind: "error", message: err instanceof LimitError ? message : `${message} Try again.` });
     }
   };
 
@@ -440,7 +451,7 @@ export default function Customizer() {
             <>
               <p className={styles.hint}>
                 This uploads your photos and letter and gives you a link. A link never changes after it is made; edit and
-                create again for a new one.
+                create again for a new one. You can make one link per day, with up to {MAX_PHOTOS} photos.
               </p>
               {(publish.kind === "uploading" || publish.kind === "saving") && (
                 <div className={styles.progress}>
@@ -453,7 +464,7 @@ export default function Customizer() {
                   </span>
                 </div>
               )}
-              {publish.kind === "error" && <p className={styles.error}>{publish.message} Try again.</p>}
+              {publish.kind === "error" && <p className={styles.error}>{publish.message}</p>}
               <button type="button" className="cute-btn" disabled={!canPublish} onClick={createLink}>
                 Create my link ♡
               </button>
