@@ -9,7 +9,7 @@ npm install
 npm run dev
 ```
 
-The sample opens in the browser. No password and no environment variables.
+The sample opens in the browser. No password and no environment variables. Letters made at `/customize` are saved to `.data/` while you develop.
 
 ## Change the sample
 
@@ -26,7 +26,7 @@ npm run typecheck
 npm run build
 ```
 
-`npm run build` writes a static site to `out/`. Do not commit `node_modules`, `.next`, or `out`.
+Do not commit `node_modules`, `.next`, `out`, or `.data`.
 
 ## Pull requests
 
